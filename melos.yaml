@@ -1,0 +1,53 @@
+name: proyecto_mate6_melos
+
+packages:
+  - app/**
+
+scripts:
+  lint:all:
+    run: melos run analyze && melos run format
+    description: Run all static analysis checks.
+
+  analyze:
+    run: |
+      melos exec -c 5 -- \
+        dart analyze . --fatal-infos
+    description: |
+      Run `dart analyze` in all packages.
+       - Note: you can also rely on your IDEs Dart Analysis / Issues window.
+  gen:
+    run: melos exec -- flutter pub run build_runner build --delete-conflicting-outputs
+
+  format:
+    run: melos exec -- flutter format .
+
+  get:
+    run: melos exec -- flutter pub get
+
+  test:select:
+    run: melos exec --dir-exists="test" --fail-fast -- flutter test --no-pub --coverage
+    description: Run Flutter tests for a specific package in this project.
+    select-package:
+      flutter: true
+      dir-exists: test
+
+  metrics:
+    run: |
+      melos exec -c 1 --ignore="*example*" -- \
+        flutter pub run dart_code_metrics:metrics analyze lib --fatal-style --fatal-warnings --fatal-performance
+    description: |
+      Run `dart_code_metrics` in all packages.
+       - Note: you can also rely on your IDEs Dart Analysis / Issues window.
+  unused_files:
+    run: melos exec -- flutter pub run dart_code_metrics:metrics check-unused-files lib --fatal-unused
+
+  unused_code:
+    run: melos exec -- flutter pub run dart_code_metrics:metrics check-unused-code lib --fatal-unused
+
+  test:
+    run: melos run test:select --no-select
+    description: Run all Flutter tests in this project.
+
+  ci:
+    run: melos run get && melos run analyze && melos run test && melos run metrics
+    description: Run all `analyze, tests and metrics`
