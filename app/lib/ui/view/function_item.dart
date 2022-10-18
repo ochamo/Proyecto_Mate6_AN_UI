@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:proyecto_mate_6/domain/model/function_model.dart';
+import 'package:proyecto_mate_6/domain/dto/function_model.dart';
 import 'package:proyecto_mate_6/ui/cubit/input_function_cubit.dart';
 
 class FunctionItem extends StatelessWidget {

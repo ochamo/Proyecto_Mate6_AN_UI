@@ -1,6 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:proyecto_mate_6/domain/model/function_model.dart';
+import 'package:proyecto_mate_6/data/model/function_result_model.dart';
+import 'package:proyecto_mate_6/domain/dto/function_model.dart';
+import 'package:proyecto_mate_6/domain/usecase/calc_use_case.dart';
+import 'package:proyecto_mate_6/domain/usecase/result.dart';
 
 part 'input_function_cubit.freezed.dart';
 
@@ -17,6 +20,12 @@ class InputFunctionCubit extends Cubit<InputFunctionState> {
     var items = (state as _Loaded).functions;
     List<FunctionModel> newList = List.from(items)..removeAt(i);
     emit((state as _Loaded).copyWith(functions: newList));
+  }
+
+  Future<Result<FunctionResultModel>> sendData() async {
+    var items = (state as _Loaded).functions;
+    var response = await doCalcUseCase(items);
+    return response;
   }
 }
 
